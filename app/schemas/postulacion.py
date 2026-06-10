@@ -68,6 +68,8 @@ class PostulacionResumenResponse(BaseModel):
     estudiante_id: uuid.UUID
     empresa_id: uuid.UUID
     estado: EstadoPostulacion
+    # Nota de la empresa, visible para el estudiante en su listado.
+    nota_empresa: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 

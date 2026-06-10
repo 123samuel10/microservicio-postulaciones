@@ -22,11 +22,23 @@ class EstadoPostulacion(str, enum.Enum):
     retirado = "retirado"
 
 
-# Transiciones válidas de estado
+# Transiciones válidas de estado.
+# La empresa decide libremente el siguiente paso desde cualquier estado activo
+# (no se obliga a la secuencia revisión → entrevista → aceptado): puede, por
+# ejemplo, aceptar o rechazar directamente sin pasar por entrevista. Los estados
+# terminales (aceptado/rechazado/retirado) no admiten más cambios.
+_DESTINOS_ACTIVOS = {
+    EstadoPostulacion.en_revision,
+    EstadoPostulacion.entrevista,
+    EstadoPostulacion.aceptado,
+    EstadoPostulacion.rechazado,
+    EstadoPostulacion.retirado,
+}
+
 TRANSICIONES_VALIDAS: dict = {
-    EstadoPostulacion.postulado:   {EstadoPostulacion.en_revision, EstadoPostulacion.rechazado, EstadoPostulacion.retirado},
-    EstadoPostulacion.en_revision: {EstadoPostulacion.entrevista, EstadoPostulacion.rechazado, EstadoPostulacion.retirado},
-    EstadoPostulacion.entrevista:  {EstadoPostulacion.aceptado, EstadoPostulacion.rechazado, EstadoPostulacion.retirado},
+    EstadoPostulacion.postulado:   _DESTINOS_ACTIVOS,
+    EstadoPostulacion.en_revision: _DESTINOS_ACTIVOS - {EstadoPostulacion.en_revision},
+    EstadoPostulacion.entrevista:  _DESTINOS_ACTIVOS - {EstadoPostulacion.entrevista},
     EstadoPostulacion.aceptado:    set(),
     EstadoPostulacion.rechazado:   set(),
     EstadoPostulacion.retirado:    set(),
