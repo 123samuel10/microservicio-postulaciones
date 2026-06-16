@@ -23,7 +23,7 @@ from app.services.postulacion_service import PostulacionService
 router = APIRouter(prefix="/postulaciones", tags=["Postulaciones"])
 
 
-@router.post("/", response_model=PostulacionResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=PostulacionResponse, status_code=status.HTTP_201_CREATED)
 async def crear_postulacion(
     datos: PostulacionCreate,
     db: AsyncSession = Depends(get_db),
